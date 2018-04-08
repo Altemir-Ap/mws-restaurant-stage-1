@@ -1,46 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+  <meta charset='utf-8'>
+  <meta name=viewport content="width=device-width, initial-scale=1">
+  <!-- Normalize.css for better cross-browser consistency -->
   <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css" />
+  <!-- Main CSS file -->
   <link rel="stylesheet" href="css/styles.css">
   <title>Restaurant Reviews</title>
 </head>
 
 <body>
+  <!-- Beginning header -->
   <header>
+    <!-- Begin nav -->
     <nav>
-      <h1><a href="/">Restaurant Reviews</a></h1>
+      <h1>
+        <a href="/" tabindex="-1">Restaurant Reviews</a>
+      </h1>
     </nav>
+    <!-- End nav -->
   </header>
+  <!-- End header -->
 
+  <!-- Beginning main -->
   <main id="maincontent">
+    <!--Beginning map -->
     <section id="map-container">
-      <div id="map"></div>
+      <div id="map" role="application"></div>
     </section>
+    <!--End map -->
+    <!--Beginning restaurant -->
     <section>
       <div class="filter-options">
         <h2>Filter Results</h2>
-        <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+        <select tabindex="0" id="neighborhoods-select" name="neighborhoods" aria-label="Select Neighborhood" onchange="updateRestaurants()">
           <option value="all">All Neighborhoods</option>
         </select>
-        <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+        <select tabindex="0" id="cuisines-select" name="cuisines" aria-label="Select Cusisine" onchange="updateRestaurants()">
           <option value="all">All Cuisines</option>
         </select>
       </div>
       <ul id="restaurants-list"></ul>
     </section>
+    <!--End restaurant -->
   </main>
+  <!-- End main -->
 
-  <script type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-  <script type="application/javascript" charset="utf-8" src="js/main.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places&callback=initMap"></script>
-
-
+  <!-- Beginning footer -->
   <footer id="footer">
-    Copyright (c) 2017 <a href="/"><strong>Restaurant Reviews</strong></a> All Rights Reserved.
+    Copyright (c) 2017
+    <a href="/">
+      <strong>Restaurant Reviews</strong>
+    </a> All Rights Reserved.
   </footer>
+  <!-- End footer -->
 
+  <!-- Beginning scripts -->
+  <!-- Database helpers -->
+  <script src="js/dbhelper.js"></script>
+  <!-- Main javascript file -->
+  <script src="js/main.js"></script>
+  <!-- Google Maps -->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-v0IEvrcMldQ_CbrXILirWyxfodBbcEc&libraries=places&callback=initMap"></script>
+  <!-- End scripts -->
+  
 </body>
 
 </html>
