@@ -80,6 +80,9 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
+  google.maps.event.addDomListener(window, 'resize', function () {
+    map.setCenter(loc);
+  }); 
   updateRestaurants();
 }
 
@@ -141,6 +144,7 @@ createRestaurantHTML = (restaurant) => {
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = restaurant.name + 'Image'
   li.append(image);
 
   const name = document.createElement('h1');
@@ -157,6 +161,7 @@ createRestaurantHTML = (restaurant) => {
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
+  more.setAttribute('arial-label', 'View details of ' + restaurant.name + 'restaurant');
   more.href = DBHelper.urlForRestaurant(restaurant);
   li.append(more)
 
@@ -175,4 +180,11 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     });
     self.markers.push(marker);
   });
+}
+
+/**
+ * Add title for iframes
+ */
+titleLoad = () =>{
+  document.getElementsByTagName( "iframe" )[0].setAttribute("title", "Iframe Map");  
 }
