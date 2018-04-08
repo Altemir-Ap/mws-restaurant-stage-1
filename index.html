@@ -58,6 +58,16 @@
   <!-- End footer -->
 
   <!-- Beginning scripts -->
+  <!-- ServiceWorker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(function (response) { 
+        console.log("Service Worker Registered:", response.active.state); 
+      }, function(error){
+        console.log("ServiceWorker Registration has failed: ", error);
+      });
+    }
+  </script>
   <!-- Database helpers -->
   <script src="js/dbhelper.js"></script>
   <!-- Main javascript file -->
@@ -65,7 +75,7 @@
   <!-- Google Maps -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB-v0IEvrcMldQ_CbrXILirWyxfodBbcEc&libraries=places&callback=initMap"></script>
   <!-- End scripts -->
-  
+
 </body>
 
 </html>
