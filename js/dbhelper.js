@@ -168,3 +168,10 @@ class DBHelper {
   }
 
 }
+
+/**
+ * Add title for iframes
+ */
+titleLoad = () =>{
+  document.getElementsByTagName( "iframe" )[0].setAttribute("title", "Iframe Map");  
+}

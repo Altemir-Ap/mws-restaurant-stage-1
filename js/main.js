@@ -181,10 +181,3 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 }
-
-/**
- * Add title for iframes
- */
-titleLoad = () =>{
-  document.getElementsByTagName( "iframe" )[0].setAttribute("title", "Iframe Map");  
-}
