@@ -316,7 +316,7 @@ nav h1 a {
 
   #maincontent > #map-container{
    width: 100%;
-   height: 280px;
+   height: 400px;
    position: relative;
   }
   #maincontent > #restaurant-container{
@@ -328,9 +328,22 @@ nav h1 a {
     width: 100%;
   }
 
-
   #footer{
     width: 100%;
     padding: 25px 0px;
   }
+}
+
+.skip-link{
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #BF1722;
+  color: white;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:focus{
+  top:0;
 }
