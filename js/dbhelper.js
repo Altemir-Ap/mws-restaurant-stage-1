@@ -1,6 +1,7 @@
 /**
  * Common database helper functions.
  */
+const objectStore = 'restaurantObjectStore';
 class DBHelper {
 
   /**
@@ -13,19 +14,86 @@ class DBHelper {
   }
 
   /**
+   * Create IndexedDB
+  */
+  static initDB(){
+    const indexedDB = window.indexedDB;
+    const open = indexedDB.open('restaurantDB', 1);
+
+    open.onupgradeneeded = function onUpgradeNeeded(){
+      const db = open.result;
+      db.createObjectStore(objectStore, {keyPath: 'id'});
+    };
+
+    return open;
+  }
+
+  /**
+   * Store data to DB
+  */
+  static storeData(data){
+    const open = DBHelper.initDB();
+
+    open.onsuccess = function onSuccess(){
+      const db = open.result;
+      const tx = db.transaction(objectStore, 'readwrite');
+      const store = tx.objectStore(objectStore);
+
+      data.forEach((resp)=>{
+        store.put(resp);
+      });
+    };
+  }
+
+  /**
+   * Get data from DB
+  */
+  static getData(query, callback){
+    const open = DBHelper.initDB();
+
+    open.onsuccess = function onSuccess(){
+      const db = open.result;
+      const tx = db.transaction(objectStore, 'readwrite');
+      const store = tx.objectStore(objectStore);
+
+      let res = store.getAll();
+      if (query){
+        res = store.get(parseInt(query, 10));
+      };
+
+      res.onsuccess = function resOnSuccess(){
+        callback(res.result);
+      };
+
+      tx.oncomplete = function onComplete(){
+        db.close();
+      };
+    };
+  }
+
+  /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
+    DBHelper.getData(null, (data)=>{
+      if (data){
+        console.log('DBs Data', data);
+        callback(null, data);
+      }
 
-    fetch(DBHelper.DATABASE_URL)
-    .then((response)=>response.json())
-    .then((restaurant)=> {
-      console.log('Response', restaurant);
-      callback(null, restaurant);
+      fetch(DBHelper.DATABASE_URL)
+      .then((response)=>response.json())
+      .then((restaurant)=> {
+        console.log('Response', restaurant);
+        callback(null, restaurant);
+        DBHelper.storeData(restaurant)
+      })
+      .catch((err)=>{
+        callback(err, null);
+      })
+
     })
-    .catch((err)=>{
-      callback(err, null);
-    })
+
   }
 
   /**
@@ -33,17 +101,24 @@ class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        if (restaurant) { // Got the restaurant
-          callback(null, restaurant);
-        } else { // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
-        }
+    DBHelper.getData(id, (data)=>{
+      if (data){
+        console.log('DBs Data', data);
+        callback(null, data);
+        return;
       }
+      DBHelper.fetchRestaurants((error, restaurants) => {
+        if (error) {
+          callback(error, null);
+        } else {
+          const restaurant = restaurants.find(r => r.id == id);
+          if (restaurant) { // Got the restaurant
+            callback(null, restaurant);
+          } else { // Restaurant does not exist in the database
+            callback('Restaurant does not exist', null);
+          }
+        }
+      });
     });
   }
 
